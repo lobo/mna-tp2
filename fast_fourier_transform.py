@@ -8,7 +8,7 @@ def FFT_R(x):
     splitN = int(N/2)
     
     if np.log2(N) % 1 > 0:
-        raise ValueError('values count must be a power of 2, "{}" given.'.format(values_count))
+        raise ValueError('values count must be a power of 2, "{}" given.'.format(N))
     elif N < 2:
         return x
     else:

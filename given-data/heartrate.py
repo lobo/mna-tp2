@@ -1,4 +1,4 @@
-b# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Sat Sep 16 19:23:10 2017
 
@@ -52,15 +52,16 @@ R = np.abs(np.fft.fftshift(np.fft.fft(r)))**2
 G = np.abs(np.fft.fftshift(np.fft.fft(g)))**2
 B = np.abs(np.fft.fftshift(np.fft.fft(b)))**2
 
-plt.plot(60*f,R)
+plt.plot(60*f,R,'red')
 plt.xlim(0,200)
 
 
-plt.plot(60*f,G)
+plt.plot(60*f,G,'green')
 plt.xlim(0,200)
 plt.xlabel("frecuencia [1/minuto]")
 
-plt.plot(60*f,B)
+plt.plot(60*f,B,'blue')
 plt.xlim(0,200)
+plt.show()
 
 print("Frecuencia cardíaca: ", abs(f[np.argmax(G)])*60, " pulsaciones por minuto")

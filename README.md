@@ -1,5 +1,8 @@
+Como leer el nombre de los  archivos con graficos:
+`{Nombre del video del que salieron}_{Tamaño de la ventana}.png`
 # ITBA - Métodos Numéricos Avanzados - Grupo 10
 Second Advanced Numerical Methods Project: Hear Beat Rate
+
 
 ## Getting Started
 These instructions will install the development environment into your local machine.

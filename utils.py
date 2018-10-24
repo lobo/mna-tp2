@@ -1,3 +1,4 @@
+import csv
 import numpy as np
 
 def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRightCornerY,length):
@@ -18,4 +19,39 @@ def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRig
         currentFrameNo += 1
     print(currentFrameNo)
     return [r, g, b]
+
+# csv file name convention:
+# '{video name}_{window size}_{frames per second}_{amount of frames}.csv'
+def write_csv(file_name, fps, r, g, b, R, G, B):
+    print(file_name)
+    print(fps)
+    print(len(r))
+    print(len(R))
+    with open('./recolected_info/{}_{}_{}.csv'.format(file_name, int(fps), len(r)), mode='w') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        
+        csv_writer.writerow(['r','g','b','R','G','B'])
+        for i in range(len(r)):
+            csv_writer.writerow([r[i],g[i],b[i],R[i],G[i],B[i]])
+
+
+def read_csv(file_name):
+    split_file_name = file_name.split('.')[0].split('_')
+    length = int(split_file_name[-1])
+    fps = int(split_file_name[-2])
+    r , g, b = np.zeros((1,length)), np.zeros((1,length)), np.zeros((1,length))
+    R , G, B = np.zeros((1,length)), np.zeros((1,length)), np.zeros((1,length))
+    with open('./recolected_info/{}'.format(file_name)) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count > 0:
+                r[0][line_count-1] = row[0]
+                g[0][line_count-1] = row[1]
+                b[0][line_count-1] = row[2]
+                R[0][line_count-1] = row[3]
+                G[0][line_count-1] = row[4]
+                B[0][line_count-1] = row[5]
+            line_count += 1
+        return r, g, b, R, G, B, fps
 

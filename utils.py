@@ -5,11 +5,11 @@ def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRig
     r = np.zeros((1,length))
     g = np.zeros((1,length))
     b = np.zeros((1,length))
-    
+
     currentFrameNo = 0
     while(cap.isOpened() and currentFrameNo < length):
         ret, frame = cap.read()
-        
+
         if ret == True:
             r[0,currentFrameNo] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,0])
             g[0,currentFrameNo] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,1])
@@ -17,19 +17,12 @@ def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRig
         else:
             break
         currentFrameNo += 1
-    print(currentFrameNo)
     return [r, g, b]
 
-# csv file name convention:
-# '{video name}_{window size}_{frames per second}_{amount of frames}.csv'
-def write_csv(file_name, fps, r, g, b, R, G, B):
-    print(file_name)
-    print(fps)
-    print(len(r))
-    print(len(R))
-    with open('./recolected_info/{}_{}_{}.csv'.format(file_name, int(fps), len(r)), mode='w') as csv_file:
+def write_csv(filename, r, g, b, R, G, B):
+    with open("{}.csv".format(filename), mode='w') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        
+
         csv_writer.writerow(['r','g','b','R','G','B'])
         for i in range(len(r)):
             csv_writer.writerow([r[i],g[i],b[i],R[i],G[i],B[i]])
@@ -54,4 +47,9 @@ def read_csv(file_name):
                 B[0][line_count-1] = row[5]
             line_count += 1
         return r, g, b, R, G, B, fps
+
+# file name convention:
+# '{video name}_{frames per second}_{amount of frames}_{window size}_{filtered or not}.{[png|csv]}'
+def filename_builder(title, fps, len_r, window_size, filtered):
+    return './recolected_info/{}_{}_{}_{}_{}'.format(title, int(fps), len_r, window_size, "filtered" if filtered else "nfiltered")
 

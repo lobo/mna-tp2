@@ -1,2 +1,4 @@
 *.swp
+data/*
+recolected_info/*
 __pycache__/*

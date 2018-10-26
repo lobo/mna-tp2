@@ -1,5 +1,9 @@
 import numpy as np
 
+def FFT_SHIFT(x):
+    n = len(x)
+    return np.concatenate((x[n//2:n], x[0:n//2]), axis=0)
+
 # FFT Implemented as described here:
 # https://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/
 def FFT_R(x):
@@ -9,8 +13,8 @@ def FFT_R(x):
 
     if np.log2(N) % 1 > 0:
         raise ValueError('values count must be a power of 2, "{}" given.'.format(N))
-    elif N < 2:
-        return x
+    if N < 2:
+       return x
     else:
         X_even_values = FFT_R(x[::2])
         X_odd_values = FFT_R(x[1::2])

@@ -1,22 +1,24 @@
 import csv
 import numpy as np
 
-def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRightCornerY,length):
-    r = np.zeros((1,length))
-    g = np.zeros((1,length))
-    b = np.zeros((1,length))
+def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRightCornerY,length, time_start, time_finish):
 
-    currentFrameNo = 0
-    while(cap.isOpened() and currentFrameNo < length):
+    frame_start  = int(time_start * length)
+    current_frame_no = frame_start
+    frame_finish = int(time_finish * length)
+    r = np.zeros((1,frame_finish - frame_start))
+    g = np.zeros((1,frame_finish - frame_start))
+    b = np.zeros((1,frame_finish - frame_start))
+    while(cap.isOpened() and current_frame_no < frame_finish):
         ret, frame = cap.read()
 
-        if ret == True:
-            r[0,currentFrameNo] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,0])
-            g[0,currentFrameNo] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,1])
-            b[0,currentFrameNo] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,2])
+        if ret == True and frame_start <= current_frame_no <= frame_finish:
+            r[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,2])
+            g[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,1])
+            b[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,0])
         else:
             break
-        currentFrameNo += 1
+        current_frame_no += 1
     return [r, g, b]
 
 def write_csv(filename, r, g, b, R, G, B):
@@ -53,3 +55,8 @@ def read_csv(file_name):
 def filename_builder(title, fps, len_r, window_size, filtered):
     return './recolected_info/{}_{}_{}_{}_{}'.format(title, int(fps), len_r, window_size, "filtered" if filtered else "nfiltered")
 
+
+def pretty_print(headers, data):
+    print(headers)
+    for i in range(len(data)):
+        print(str(data[i])[1:-1])

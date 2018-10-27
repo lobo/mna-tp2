@@ -59,4 +59,5 @@ def filename_builder(title, fps, len_r, window_size, filtered):
 def pretty_print(headers, data):
     print(headers)
     for i in range(len(data)):
-        print(str(data[i])[1:-1])
+        print(",".join([str(round(j,2)) for j in data[i]]))
+

@@ -71,7 +71,8 @@ def collect(video, size=300, npfft=True, filter_signal=False, persist=True, verb
     if persist:
         if verbose:
             print('Storing data...')
-        #plt.subplot(2,1,1)
+        if not filter_signal:
+            plt.subplot(2,1,1)
         plt.plot(60*f,R, 'red')
         plt.plot(60*f,G, 'green')
         plt.plot(60*f,B, 'blue')
@@ -83,12 +84,13 @@ def collect(video, size=300, npfft=True, filter_signal=False, persist=True, verb
         plt.annotate("{} latidos por minuto".format(abs(round(f[np.argmax(R)]*60,1))), xy=(1, 0), xycoords='axes fraction', fontsize=10,xytext=(0, -20), textcoords='offset points',ha='right', va='top')
         plt.title(title)
         
-        #plt.subplot(2,1,2)
-        #plt.plot(np.arange(n),r0, 'red')
-        #plt.plot(np.arange(n),g0, 'green')
-        #plt.plot(np.arange(n),b0, 'blue')
-        #plt.xlabel("valor r g b")
-        #plt.tight_layout()
+        if not filter_signal:
+            plt.subplot(2,1,2)
+            plt.plot(np.arange(n),r0, 'red')
+            plt.plot(np.arange(n),g0, 'green')
+            plt.plot(np.arange(n),b0, 'blue')
+            plt.xlabel("valor r g b")
+            plt.tight_layout()
     
         ut.write_csv(filename, r, g, b, R, G, B)
         plt.savefig("{}.png".format(filename))

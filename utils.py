@@ -3,8 +3,8 @@ import numpy as np
 
 def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRightCornerY,length, time_start, time_finish):
 
+    current_frame_no = 0
     frame_start  = int(time_start * length)
-    current_frame_no = frame_start
     frame_finish = int(time_finish * length)
     r = np.zeros((1,frame_finish - frame_start))
     g = np.zeros((1,frame_finish - frame_start))
@@ -16,7 +16,7 @@ def load_frames(cap,upperLeftCornerX,upperLeftCornerY,lowerRightCornerX,lowerRig
             r[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,2])
             g[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,1])
             b[0,current_frame_no-frame_start] = np.mean(frame[upperLeftCornerX:lowerRightCornerX, upperLeftCornerY:lowerRightCornerY,0])
-        else:
+        elif not ret or current_frame_no > frame_finish:
             break
         current_frame_no += 1
     return [r, g, b]
